@@ -1,7 +1,5 @@
-
-
 """
-Some little hello world
+Demonstrating Local operations
 """
 
 import cv2
