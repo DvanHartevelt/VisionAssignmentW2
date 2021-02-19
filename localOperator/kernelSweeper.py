@@ -1,5 +1,7 @@
 """
-This contains code for a (3x3) kernal sweeper.
+OLD, new one is called convolute.py
+
+This contains code for a kernal sweeper.
 
 A kernel is an nxn matrix of numbers, where n is an odd number.
 By calculating the dotproduct of the kernal and the imagematrix,
@@ -183,3 +185,31 @@ kernelEdgeDetectionHorizontal = oddkernel([3, 3], [[-1, -1, -1], [2, 2, 2],   [-
 kernelEdgeDetectionPlus45     = oddkernel([3, 3], [[2, -1, -1],  [-1, 2, -1], [-1, -1, 2]] , name='+45 deg. edge detecting')
 kernelEdgeDetectionVertical   = oddkernel([3, 3], [[-1, 2, -1],  [-1, 2, -1], [-1, 2, -1]] , name='vertical edge detecting')
 kernelEdgeDetectionMinus45    = oddkernel([3, 3], [[-1, -1, 2],  [-1, 2, -1], [2, -1, -1]] , name='-45 deg. edge detecting')
+
+def maxmin(img):
+    width = img.shape[1]
+    height = img.shape[0]
+
+    imgNew = np.zeros((height, width), np.uint8)
+
+    # 2D sweep of an odd-sized kernel
+    for y in range(1, height - 1):
+        for x in range(1, width - 1):
+            # for every pixel, the maximum and minimum of the surrounding 9
+            # in a 3x3 box are subtracted from one another.
+            min = img[y - 1, x - 1]
+            max = min
+
+            for j in range(-1, 2):
+                for i in range(-1, 2):
+                    if img[y - j, x - i] < min:
+                        min = img[y - j, x - i]
+
+                    if img[y - j, x - i] > max:
+                        max = img[y - j, x - i]
+
+            imgNew[y, x] = max - min
+
+        pb.printProgressBar(y, height - 2, prefix="Calculating minmax...:", length=50)
+
+    return imgNew

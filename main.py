@@ -4,6 +4,7 @@ Demonstrating Local operations
 
 import cv2
 from localOperator import kernelSweeper as ks
+from localOperator import convolute as cv
 
 def query_resize(imgOrig, resizeNr, name='unnamed'):
     smallerPic = input(f"Would you like to resize the {name} image to be one {resizeNr ** 2}th the size? [y/n]")
@@ -29,12 +30,18 @@ def main():
     imgMoon = query_resize(imgMoonO, 2, name='moon')
     imgGrayMoon = cv2.cvtColor(imgMoon, cv2.COLOR_RGB2GRAY)
 
+    # imgBlurred = cv.gray_convolute3x3(imgGrayCat, cv.kernelBlur)
+    # cv2.imshow("Original", imgGrayCat)
+    # cv2.imshow("Blurred 3", imgBlurred)
+    #
+    # cv2.waitKey(0)
+
     if input("Skip blurring? [y/n]").lower() != 'y':
         """
         Demonstrating Blurring
         """
         imgBlurred   = ks.kernelBlur3.convolute(imgGrayCat)
-        imgBigBlur   = ks.kernelBlur5.convolute(imgGray)
+        imgBigBlur   = ks.kernelBlur5.convolute(imgGrayCat)
 
         cv2.imshow("Original", imgGrayCat)
         cv2.imshow("Blurred 3", imgBlurred)
@@ -61,35 +68,24 @@ def main():
         """
         Demonstrating Prewitt filter
         """
-        imgPrewitt = ks.PrewittFilter(imgGrayMoon)
+        imgPrewitt = ks.PrewittOperator(imgGrayMoon)
 
         cv2.imshow("Original Moon", imgGrayMoon)
         cv2.imshow("Prewitt Moon", imgPrewitt)
 
+    if input("Skip Sobel? [y,n]").lower() != 'y':
+        """
+        Demonstrating Sobel filter
+        """
+        imgSobel = ks.SobelOperator(imgGrayMoon)
 
+        cv2.imshow("Original Moon", imgGrayMoon)
+        cv2.imshow("Sobel Moon", imgSobel)
 
-    # if (input("Skip blurring? [y/n]").lower() != 'y'):
-    #     imgBlurred   = ks.kernelBlur3.sweep(imgGrayCat)
-    #     #imgBigBlur   = ks.kernelBlur5.sweep(imgGray)
-    #     imgSQLapHP   = ks.kernelSquareLaplacianHighPass.sweep(imgGrayCat)
-    #     imgFullLapHP = ks.kernelFullLaplacianHighPass.sweep(imgGrayCat)
-    #
-    #     cv2.imshow("Original", imgGrayCat)
-    #     cv2.imshow("Blurred 3", imgBlurred)
-    #     #cv2.imshow("Blurred 5", imgBigBlur)
-    #
-    #
-    #
-    #     #cv2.waitKey(0)
-    #
-    #
-    # imgNorth = ks.kernelEdgeDetectionHorizontal.sweep(imgGrayCat)
-    # imgSouth = imgNorth
-    # imgEast  = ks.kernelEdgeDetectionVertical.sweep(imgGrayCat)
-    #
-    # cv2.imshow("Original", imgGrayCat)
-    # cv2.imshow("North and South edge detection", imgNorth)
-    # cv2.imshow("East edge detection", imgNorth)
+    if input("Skip minmax? [y,n]").lower() != y:
+        """
+        Demonstrating minmax
+        """
 
 
     cv2.waitKey(0)
